@@ -2,6 +2,7 @@ import { createClient, hasSupabaseEnv } from "@/lib/supabase/server";
 import {
   DEFAULT_SETTINGS,
   type Product,
+  type ProductImage,
   type ProductWithImages,
   type Review,
   type StoreSettings,
@@ -24,22 +25,32 @@ export async function getSettings(): Promise<StoreSettings> {
   }
 }
 
-export async function getActiveProducts(): Promise<Product[]> {
+export async function getActiveProducts(): Promise<ProductWithImages[]> {
   if (!hasSupabaseEnv()) return [];
   try {
     const supabase = await createClient();
     const { data } = await supabase
       .from("products")
-      .select("*")
+      .select("*, product_images(id, url, sort_order)")
       .eq("is_active", true)
       .order("created_at", { ascending: false });
-    return (data as Product[]) ?? [];
+
+    if (!data) return [];
+    return data.map((p) => {
+      const raw = (p.product_images ?? []) as ProductImage[];
+      const sorted = [...raw].sort((a, b) => a.sort_order - b.sort_order);
+      return {
+        ...(p as Product),
+        images: sorted,
+        product_images: sorted,
+      };
+    }) as ProductWithImages[];
   } catch {
     return [];
   }
 }
 
-export async function getFeaturedProducts(limit = 4): Promise<Product[]> {
+export async function getFeaturedProducts(limit = 4): Promise<ProductWithImages[]> {
   const products = await getActiveProducts();
   const featured = products.filter((p) => p.is_featured);
   return (featured.length > 0 ? featured : products).slice(0, limit);
@@ -66,7 +77,8 @@ export async function getProductBySlug(slug: string): Promise<ProductWithImages 
       .select("*")
       .eq("product_id", product.id)
       .order("sort_order");
-    return { ...(product as Product), images: (images ?? []) as ProductWithImages["images"] };
+    const sorted = ((images as ProductImage[]) ?? []).sort((a, b) => a.sort_order - b.sort_order);
+    return { ...(product as Product), images: sorted, product_images: sorted };
   } catch {
     return null;
   }
@@ -76,7 +88,7 @@ export async function getRelatedProducts(
   category: string,
   excludeId: string,
   limit = 4,
-): Promise<Product[]> {
+): Promise<ProductWithImages[]> {
   const products = await getActiveProducts();
   return products
     .filter((p) => p.category === category && p.id !== excludeId)

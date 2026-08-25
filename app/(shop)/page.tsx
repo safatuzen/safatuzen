@@ -36,7 +36,7 @@ export default async function HomePage() {
       (await getActiveProducts()).find((p) => p.id === settings.hero_product_id)?.slug ?? null;
     if (slug) heroProduct = await getProductBySlug(slug);
   }
-  if (!heroProduct && featured[0]) heroProduct = { ...featured[0], images: [] };
+  if (!heroProduct && featured[0]) heroProduct = featured[0];
 
   return (
     <>

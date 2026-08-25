@@ -28,6 +28,7 @@ export interface ProductImage {
 
 export interface ProductWithImages extends Product {
   images: ProductImage[];
+  product_images?: ProductImage[];
 }
 
 export type OrderStatus = "new" | "confirmed" | "shipped" | "delivered" | "cancelled";

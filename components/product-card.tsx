@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { CATEGORY_LABELS, type Product } from "@/lib/types";
+import { CATEGORY_LABELS, type ProductWithImages } from "@/lib/types";
 import { PriceBlock } from "@/components/price-block";
 import { ProductImageFrame } from "@/components/product-image-frame";
 import { StaggerItem } from "@/components/motion";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product }: { product: ProductWithImages }) {
   const inStock = product.stock > 0;
+  const images = product.images ?? product.product_images ?? [];
 
   return (
     <StaggerItem>
@@ -13,6 +14,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="relative">
           <Link href={`/product/${product.slug}`} aria-label={product.name}>
             <ProductImageFrame
+              images={images}
               name={product.name}
               className="aspect-square w-full rounded-none"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getActiveProducts } from "@/lib/data";
-import { CATEGORY_LABELS, type Category, type Product } from "@/lib/types";
+import { CATEGORY_LABELS, type Category, type ProductWithImages } from "@/lib/types";
 import { ProductCard } from "@/components/product-card";
 import { Stagger } from "@/components/motion";
 
@@ -29,7 +29,7 @@ export default async function ShopPage({
   const activeSort: SortKey =
     sort === "price-asc" || sort === "price-desc" ? sort : "new";
 
-  const all: Product[] = await getActiveProducts();
+  const all: ProductWithImages[] = await getActiveProducts();
   let products = all.filter((p) => !activeCat || p.category === activeCat);
   if (activeSort === "price-asc") products = [...products].sort((a, b) => a.price - b.price);
   if (activeSort === "price-desc") products = [...products].sort((a, b) => b.price - a.price);

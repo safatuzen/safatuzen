@@ -3,8 +3,7 @@ import { Pencil, Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { CATEGORY_LABELS } from "@/lib/types";
 import { formatBDT } from "@/lib/utils";
-import { Switch, ConfirmDelete } from "@/components/admin/controls";
-import { setProductFlag, deleteProduct } from "@/lib/actions";
+import { ProductFlagToggle, ProductDeleteAction } from "@/components/admin/controls";
 
 export default async function AdminProductsPage() {
   const supabase = await createClient();
@@ -67,18 +66,20 @@ export default async function AdminProductsPage() {
 
                 <div className="flex items-center gap-4">
                   <label className="flex items-center gap-2 text-xs text-ink-soft">
-                    <Switch
-                      checked={Boolean(p.is_active)}
+                    <ProductFlagToggle
+                      productId={p.id}
+                      field="is_active"
+                      initialValue={Boolean(p.is_active)}
                       label="শোকেসে দেখান"
-                      onChange={(v) => void setProductFlag(p.id, "is_active", v)}
                     />
                     শোকেসে
                   </label>
                   <label className="flex items-center gap-2 text-xs text-ink-soft">
-                    <Switch
-                      checked={Boolean(p.is_featured)}
+                    <ProductFlagToggle
+                      productId={p.id}
+                      field="is_featured"
+                      initialValue={Boolean(p.is_featured)}
                       label="ফিচার্ড"
-                      onChange={(v) => void setProductFlag(p.id, "is_featured", v)}
                     />
                     ফিচার্ড
                   </label>
@@ -91,11 +92,7 @@ export default async function AdminProductsPage() {
                   >
                     <Pencil size={16} /> এডিট
                   </Link>
-                  <ConfirmDelete
-                    onConfirm={() => void deleteProduct(p.id)}
-                    label="ডিলিট"
-                    message={`“${p.name}” মুছে ফেলা হবে। আপনি কি নিশ্চিত? এটা আর ফেরানো যাবে না।`}
-                  />
+                  <ProductDeleteAction productId={p.id} productName={p.name} />
                 </div>
               </li>
             );

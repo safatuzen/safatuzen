@@ -64,7 +64,6 @@ export default async function AdminOrdersPage({
                   <span className="font-medium text-ink">{o.customer_name}</span>
                   <a
                     href={telLink(o.phone)}
-                    onClick={(e) => e.stopPropagation()}
                     className="font-poppins text-sm text-primary underline-offset-2 hover:underline"
                   >
                     {o.phone}

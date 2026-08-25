@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
+import { setProductFlag, deleteProduct } from "@/lib/actions";
 
 export function Switch({
   checked,
@@ -42,6 +44,30 @@ export function Switch({
   );
 }
 
+export function ProductFlagToggle({
+  productId,
+  field,
+  initialValue,
+  label,
+}: {
+  productId: string;
+  field: "is_active" | "is_featured";
+  initialValue: boolean;
+  label: string;
+}) {
+  const router = useRouter();
+  return (
+    <Switch
+      checked={initialValue}
+      label={label}
+      onChange={async (next) => {
+        await setProductFlag(productId, field, next);
+        router.refresh();
+      }}
+    />
+  );
+}
+
 export function ConfirmDelete({
   onConfirm,
   label = "ডিলিট",
@@ -63,5 +89,25 @@ export function ConfirmDelete({
     >
       <Trash2 size={16} /> {label}
     </button>
+  );
+}
+
+export function ProductDeleteAction({
+  productId,
+  productName,
+}: {
+  productId: string;
+  productName: string;
+}) {
+  const router = useRouter();
+  return (
+    <ConfirmDelete
+      onConfirm={async () => {
+        await deleteProduct(productId);
+        router.refresh();
+      }}
+      label="ডিলিট"
+      message={`“${productName}” মুছে ফেলা হবে। আপনি কি নিশ্চিত? এটা আর ফেরানো যাবে না।`}
+    />
   );
 }

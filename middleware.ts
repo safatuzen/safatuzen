@@ -4,8 +4,12 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Only guard /admin routes (except /admin/login)
-  if (!pathname.startsWith("/admin") || pathname.startsWith("/admin/login")) {
+  // Ignore static files, Next.js internal assets, and API routes
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname.includes(".")
+  ) {
     return NextResponse.next();
   }
 
@@ -43,7 +47,13 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  // If already logged in, visiting /admin/login redirects to /admin dashboard
+  if (user && pathname === "/admin/login") {
+    return NextResponse.redirect(new URL("/admin", request.url));
+  }
+
+  // If NOT logged in, visiting any /admin route (except /admin/login) redirects to /admin/login
+  if (!user && pathname.startsWith("/admin") && pathname !== "/admin/login") {
     const loginUrl = new URL("/admin/login", request.url);
     loginUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(loginUrl);
@@ -53,5 +63,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin", "/admin/:path*"],
 };

@@ -10,7 +10,7 @@ import { ProductCard } from "@/components/product-card";
 import { Reveal, Stagger } from "@/components/motion";
 import { Gallery } from "./gallery";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
   const { getProductSlugs } = await import("@/lib/data");

@@ -11,7 +11,7 @@ import {
 /**
  * All public reads go through these safe helpers: they never throw and fall
  * back to empty defaults so pages prerender cleanly even before env vars /
- * seed data exist. Public pages use ISR (revalidate = 60).
+ * seed data exist.
  */
 
 export async function getSettings(): Promise<StoreSettings> {
@@ -67,18 +67,19 @@ export async function getProductBySlug(slug: string): Promise<ProductWithImages 
     const supabase = await createClient();
     const { data: product } = await supabase
       .from("products")
-      .select("*")
+      .select("*, product_images(id, url, sort_order)")
       .eq("slug", slug)
       .eq("is_active", true)
       .maybeSingle();
+
     if (!product) return null;
-    const { data: images } = await supabase
-      .from("product_images")
-      .select("*")
-      .eq("product_id", product.id)
-      .order("sort_order");
-    const sorted = ((images as ProductImage[]) ?? []).sort((a, b) => a.sort_order - b.sort_order);
-    return { ...(product as Product), images: sorted, product_images: sorted };
+    const raw = (product.product_images ?? []) as ProductImage[];
+    const sorted = [...raw].sort((a, b) => a.sort_order - b.sort_order);
+    return {
+      ...(product as Product),
+      images: sorted,
+      product_images: sorted,
+    };
   } catch {
     return null;
   }

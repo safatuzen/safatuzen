@@ -1,26 +1,70 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #fff9fb;
+  --surface: #ffffff;
+  --blush: #fce7f0;
+  --primary: #e85d8a;
+  --primary-deep: #c43e6d;
+  --accent: #c9a24b;
+  --ink: #3d2c33;
+  --ink-soft: #8a707c;
+  --success: #3e9b6f;
+  --danger: #d6455b;
+  --hairline: rgba(232, 93, 138, 0.15);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-blush: var(--blush);
+  --color-primary: var(--primary);
+  --color-primary-deep: var(--primary-deep);
+  --color-accent: var(--accent);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-hairline: var(--hairline);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-body: var(--font-hind-siliguri), "Hind Siliguri", sans-serif;
+  --font-bserif: var(--font-noto-serif-bengali), "Noto Serif Bengali", serif;
+  --font-poppins: var(--font-poppins), "Poppins", sans-serif;
+
+  --shadow-soft: 0 8px 30px rgba(232, 93, 138, 0.1);
+  --shadow-lift: 0 12px 40px rgba(232, 93, 138, 0.16);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--blush);
+  color: var(--primary-deep);
+}
+
+.hero-glow {
+  background:
+    radial-gradient(60% 50% at 70% 20%, rgba(252, 231, 240, 0.9) 0%, rgba(255, 249, 251, 0) 70%),
+    radial-gradient(40% 35% at 20% 80%, rgba(252, 231, 240, 0.7) 0%, rgba(255, 249, 251, 0) 70%);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

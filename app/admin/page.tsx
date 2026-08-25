@@ -17,6 +17,11 @@ export default async function AdminDashboard() {
     supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(6),
   ]);
 
+  const isTableMissing =
+    ordersRes.error?.code === "PGRST205" ||
+    productsRes.error?.code === "PGRST205" ||
+    reviewsRes.error?.code === "PGRST205";
+
   const tiles = [
     { label: "নতুন অর্ডার", value: ordersRes.data?.length ?? 0, icon: ShoppingCart, href: "/admin/orders" },
     { label: "মোট প্রোডাক্ট", value: productsRes.data?.length ?? 0, icon: Package, href: "/admin/products" },
@@ -32,6 +37,24 @@ export default async function AdminDashboard() {
 
   return (
     <div>
+      {isTableMissing && (
+        <div className="mb-6 rounded-3xl border border-accent/40 bg-accent/10 p-6 shadow-soft">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="mt-0.5 shrink-0 text-accent" size={24} />
+            <div>
+              <h3 className="font-bold text-ink">Supabase ডাটাবেস সেটআপ প্রয়োজন / Database Migration Required</h3>
+              <p className="mt-1 text-sm leading-relaxed text-ink-soft">
+                আপনার Supabase প্রজেক্টে এখনো টেবিলসমূহ (products, orders, reviews, store_settings) তৈরি করা হয়নি।
+              </p>
+              <div className="mt-3 rounded-2xl bg-surface p-4 text-xs font-mono text-ink border border-hairline">
+                1. Open <a href="https://supabase.com/dashboard" target="_blank" rel="noreferrer" className="text-primary underline">Supabase Dashboard</a> → SQL Editor<br />
+                2. Copy &amp; Paste all code from file: <code className="font-bold text-primary">supabase/migration.sql</code><br />
+                3. Click <strong>Run</strong> button.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <header className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-bserif text-2xl font-bold text-ink">ড্যাশবোর্ড</h1>
         <Link

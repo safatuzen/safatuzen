@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
-export default function AdminLoginPage() {
+function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
   const next = params.get("next") ?? "/admin";
@@ -36,6 +36,49 @@ export default function AdminLoginPage() {
   }
 
   return (
+    <form onSubmit={onSubmit} className="mt-6 space-y-4">
+      <div>
+        <label htmlFor="email" className="mb-1 block text-sm font-medium text-ink">Email</label>
+        <input
+          id="email"
+          type="email"
+          required
+          autoComplete="username"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="h-12 w-full rounded-2xl border border-hairline bg-surface px-4 outline-none focus:border-primary"
+        />
+      </div>
+      <div>
+        <label htmlFor="password" className="mb-1 block text-sm font-medium text-ink">Password</label>
+        <input
+          id="password"
+          type="password"
+          required
+          autoComplete="current-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="h-12 w-full rounded-2xl border border-hairline bg-surface px-4 outline-none focus:border-primary"
+        />
+      </div>
+
+      {error && (
+        <p role="alert" className="rounded-xl bg-danger/10 p-3 text-sm text-danger">{error}</p>
+      )}
+
+      <button
+        type="submit"
+        disabled={busy}
+        className="h-12 w-full rounded-full bg-primary font-semibold text-white shadow-soft transition-colors hover:bg-primary-deep disabled:opacity-60"
+      >
+        {busy ? "Signing in..." : "Sign in"}
+      </button>
+    </form>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
     <div className="flex min-h-screen items-center justify-center bg-bg p-4">
       <div className="w-full max-w-sm rounded-3xl border border-hairline bg-surface p-8 shadow-lift">
         <Link href="/" className="flex items-center justify-center gap-2">
@@ -48,48 +91,13 @@ export default function AdminLoginPage() {
         <h1 className="mt-6 text-center font-semibold text-ink">Admin Login</h1>
         <p className="mt-1 text-center text-sm text-ink-soft">অ্যাডমিন প্যানেলে প্রবেশ করুন</p>
 
-        <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-ink">Email</label>
-            <input
-              id="email"
-              type="email"
-              required
-              autoComplete="username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-12 w-full rounded-2xl border border-hairline bg-surface px-4 outline-none focus:border-primary"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-ink">Password</label>
-            <input
-              id="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="h-12 w-full rounded-2xl border border-hairline bg-surface px-4 outline-none focus:border-primary"
-            />
-          </div>
-
-          {error && (
-            <p role="alert" className="rounded-xl bg-danger/10 p-3 text-sm text-danger">{error}</p>
-          )}
-
-          <button
-            type="submit"
-            disabled={busy}
-            className="h-12 w-full rounded-full bg-primary font-semibold text-white shadow-soft transition-colors hover:bg-primary-deep disabled:opacity-60"
-          >
-            {busy ? "Signing in..." : "Sign in"}
-          </button>
-        </form>
+        <Suspense fallback={<div className="mt-6 text-center text-sm text-ink-soft">Loading...</div>}>
+          <LoginForm />
+        </Suspense>
 
         <p className="mt-4 text-center text-xs leading-relaxed text-ink-soft">
-          First time? Create your admin user in Supabase → Authentication → Users → “Add user”,
-          using the email &amp; password you chose.
+          Credentials are defined in <code className="rounded bg-blush px-1 py-0.5">.env.local</code>.
+          Run <code className="rounded bg-blush px-1 py-0.5">node scripts/create-admin.mjs</code> to sync admin credentials.
         </p>
       </div>
     </div>

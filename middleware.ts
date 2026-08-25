@@ -1,10 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-/**
- * Optimistic admin guard (Next.js 16 proxy). The authoritative check runs in
- * the /admin layout via supabase.auth.getUser().
- */
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (!pathname.startsWith("/admin") || pathname.startsWith("/admin/login")) {
@@ -13,7 +9,7 @@ export function proxy(request: NextRequest) {
 
   const hasAuthCookie = request.cookies
     .getAll()
-    .some((c) => c.name.includes("auth-token") && c.value.length > 0);
+    .some((c) => (c.name.includes("auth-token") || c.name.startsWith("sb-")) && c.value.length > 0);
 
   if (!hasAuthCookie) {
     const loginUrl = new URL("/admin/login", request.url);

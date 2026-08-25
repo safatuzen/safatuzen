@@ -6,7 +6,7 @@
 
 -- ---------- TABLES ----------
 create table if not exists public.products (
-  id uuid pk default gen_random_uuid() primary key,
+  id uuid primary key default gen_random_uuid(),
   name text not null,
   name_en text,
   slug text unique not null,

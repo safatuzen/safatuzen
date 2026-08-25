@@ -13,7 +13,7 @@ const NAV = [
   { href: "/admin/settings", label: "সেটিংস", icon: SettingsIcon },
 ];
 
-export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   if (!hasSupabaseEnv()) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-bg p-6">

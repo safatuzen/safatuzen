@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -14,10 +15,17 @@ const NAV = [
 
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <Link href="/" className={`flex items-center gap-2 ${className}`} aria-label="SafaTu Zen — হোম">
-      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary font-bserif text-lg font-bold text-white">
-        স
-      </span>
+    <Link href="/" className={`flex items-center gap-2.5 ${className}`} aria-label="SafaTu Zen — হোম">
+      <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface p-0.5 shadow-xs ring-1 ring-black/5">
+        <Image
+          src="/logo-icon.png"
+          alt="SafaTu Zen Emblem Logo"
+          width={40}
+          height={40}
+          className="h-full w-full object-contain"
+          priority
+        />
+      </div>
       <span className="font-bserif text-xl font-bold tracking-tight text-ink">
         SafaTu <span className="text-primary">Zen</span>
       </span>

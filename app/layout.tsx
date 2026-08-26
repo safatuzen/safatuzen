@@ -27,10 +27,27 @@ export const metadata: Metadata = {
   },
   description:
     "SafaTu Zen — বাংলাদেশের নারীদের জন্য গ্রুমিং, ওয়েলনেস ও ডেইলি নিডস প্রোডাক্ট। ক্যাশ অন ডেলিভারিতে সারা দেশে হোম ডেলিভারি।",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo-icon.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
   openGraph: {
     siteName: "SafaTu Zen",
     type: "website",
     locale: "bn_BD",
+    images: [
+      {
+        url: "/logo.png",
+        width: 600,
+        height: 600,
+        alt: "SafaTu Zen Logo",
+      },
+    ],
   },
 };
 

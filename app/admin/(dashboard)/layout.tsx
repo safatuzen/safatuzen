@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Package, ShoppingCart, Star, Settings as SettingsIcon, LayoutDashboard, LogOut } from "lucide-react";
 import { createClient, hasSupabaseEnv } from "@/lib/supabase/server";
@@ -43,8 +44,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <div className="mx-auto flex max-w-6xl md:gap-6 md:px-4 md:py-6">
         {/* Desktop sidebar */}
         <aside className="sticky top-6 hidden h-fit w-56 shrink-0 rounded-3xl border border-hairline bg-surface p-4 shadow-soft md:block">
-          <Link href="/admin" className="flex items-center gap-2 px-2 py-1">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-bserif text-base font-bold text-white">স</span>
+          <Link href="/admin" className="flex items-center gap-2.5 px-2 py-1">
+            <Image
+              src="/logo-icon.png"
+              alt="SafaTu Zen Admin"
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
+            />
             <span className="font-bserif font-bold text-ink">SafaTu Zen Admin</span>
           </Link>
           <nav className="mt-4 space-y-1">

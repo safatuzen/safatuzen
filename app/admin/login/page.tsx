@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 
 function LoginForm() {
@@ -100,10 +101,14 @@ export default function AdminLoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-bg p-4">
       <div className="w-full max-w-sm rounded-3xl border border-hairline bg-surface p-8 shadow-lift">
-        <Link href="/" className="flex items-center justify-center gap-2">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-bserif text-lg font-bold text-white">
-            স
-          </span>
+        <Link href="/" className="flex items-center justify-center gap-2.5">
+          <Image
+            src="/logo-icon.png"
+            alt="SafaTu Zen"
+            width={40}
+            height={40}
+            className="h-10 w-10 object-contain"
+          />
           <span className="font-bserif text-xl font-bold text-ink">
             SafaTu <span className="text-primary">Zen</span>
           </span>

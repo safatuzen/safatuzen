@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, MessageCircle } from "lucide-react";
 import { FacebookIcon as Facebook, InstagramIcon as Instagram } from "@/components/brand-icons";
 import { getSettings } from "@/lib/data";
@@ -11,9 +12,18 @@ export async function Footer() {
     <footer className="mt-auto border-t border-hairline bg-surface">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="font-bserif text-lg font-bold text-ink">
-            SafaTu <span className="text-primary">Zen</span>
-          </p>
+          <Link href="/" className="inline-flex items-center gap-2.5">
+            <Image
+              src="/logo-icon.png"
+              alt="SafaTu Zen"
+              width={36}
+              height={36}
+              className="h-9 w-9 object-contain"
+            />
+            <span className="font-bserif text-xl font-bold text-ink">
+              SafaTu <span className="text-primary">Zen</span>
+            </span>
+          </Link>
           <p className="mt-3 text-sm leading-relaxed text-ink-soft">
             আপনার দৈনন্দিন প্রয়োজনের আস্থাশীল ঠিকানা। বিশ্বাসের সাথে, মানের সাথে —
             প্রতিটি পণ্য পৌঁছে যাক আপনার ঘরে।
